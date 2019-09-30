@@ -33,10 +33,8 @@ def create_csv_file(split_ratio,predict = False):
                 else:
                     output_string += '\n'
                     test_output.write(output_string)
-    if predict:
-        return              
     with open(dictionary_file,'w') as output:
         for key,value in categories.items():
             output.write(str(value)+ ' '+ str(key)+'\n')
 
-create_csv_file(0,predict_tag)
+create_csv_file(0.9,predict_tag)

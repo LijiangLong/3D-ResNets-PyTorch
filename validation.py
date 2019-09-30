@@ -21,13 +21,13 @@ def val_epoch(epoch, data_loader, model, criterion, opt, logger):
     end_time = time.time()
     
     #########  temp line, needs to be removed##################################
-    file  = 'epoch_'+ str(epoch)+'_validation_matrix.csv'
-    confusion_matrix = np.zeros((opt.n_classes,opt.n_classes))
-    confidence_for_each_validation = {}
+#     file  = 'epoch_'+ str(epoch)+'_validation_matrix.csv'
+#     confusion_matrix = np.zeros((opt.n_classes,opt.n_classes))
+#     confidence_for_each_validation = {}
     ###########################################################################
     
     #pdb.set_trace()
-    for i, (inputs, targets, paths) in enumerate(data_loader):
+    for i, (inputs, targets) in enumerate(data_loader):
         data_time.update(time.time() - end_time)
 
         if not opt.no_cuda:
@@ -40,8 +40,8 @@ def val_epoch(epoch, data_loader, model, criterion, opt, logger):
             loss = criterion(outputs, targets)
             acc = calculate_accuracy(outputs, targets)
             #########  temp line, needs to be removed##################################
-            for j in range(len(targets)):
-                confidence_for_each_validation[paths[j]] = [x.item() for x in outputs[j]]
+#             for j in range(len(targets)):
+#                 confidence_for_each_validation[paths[j]] = [x.item() for x in outputs[j]]
             '''
             rows = [int(x) for x in targets]
             columns = [int(x) for x in np.argmax(outputs,1)]
@@ -72,8 +72,8 @@ def val_epoch(epoch, data_loader, model, criterion, opt, logger):
     #print(confusion_matrix)
     #confusion_matrix = pd.DataFrame(confusion_matrix)
     #confusion_matrix.to_csv(file)
-    confidence_matrix = pd.DataFrame.from_dict(confidence_for_each_validation, orient='index')
-    confidence_matrix.to_csv('confidence_matrix.csv')
+#     confidence_matrix = pd.DataFrame.from_dict(confidence_for_each_validation, orient='index')
+#     confidence_matrix.to_csv('confidence_matrix.csv')
     
     #########  temp line, needs to be removed##################################
     
