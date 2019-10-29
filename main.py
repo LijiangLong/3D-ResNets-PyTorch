@@ -35,6 +35,8 @@ if __name__ == '__main__':
             opt.resume_path = os.path.join(opt.root_path, opt.resume_path)
         if opt.pretrain_path:
             opt.pretrain_path = os.path.join(opt.root_path, opt.pretrain_path)
+        if not os.path.exists(opt.result_path):
+            os.makedirs(opt.result_path)
     opt.scales = [opt.initial_scale]
     for i in range(1, opt.n_scales):
         opt.scales.append(opt.scales[-1] * opt.scale_step)
@@ -107,8 +109,9 @@ if __name__ == '__main__':
             optimizer, 'min', patience=opt.lr_patience)
     if not opt.no_val:
         spatial_transform = Compose([
-            Scale(opt.sample_size),
-            CenterCrop(opt.sample_size),
+            crop_method,
+            # Scale(opt.sample_size),
+            # CenterCrop(opt.sample_size),
             ToTensor(opt.norm_value), norm_method
         ])
         temporal_transform = TemporalRandomCrop(opt.sample_duration)
