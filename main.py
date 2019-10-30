@@ -72,6 +72,7 @@ if __name__ == '__main__':
             crop_method = MultiScaleCornerCrop(
                 opt.scales, opt.sample_size, crop_positions=['c'])
         spatial_transform = Compose([
+            CenterCrop(opt.sample_center_crop),
             crop_method,
             RandomHorizontalFlip(),
             ToTensor(opt.norm_value), norm_method
@@ -109,9 +110,9 @@ if __name__ == '__main__':
             optimizer, 'min', patience=opt.lr_patience)
     if not opt.no_val:
         spatial_transform = Compose([
-            crop_method,
-            # Scale(opt.sample_size),
-            # CenterCrop(opt.sample_size),
+            CenterCrop(opt.sample_center_crop),
+            Scale(opt.sample_size),
+            CenterCrop(opt.sample_size),
             ToTensor(opt.norm_value), norm_method
         ])
         temporal_transform = TemporalRandomCrop(opt.sample_duration)

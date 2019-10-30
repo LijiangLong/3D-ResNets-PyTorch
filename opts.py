@@ -53,6 +53,11 @@ def parse_opts():
         type=int,
         help='Temporal duration of inputs')
     parser.add_argument(
+        '--sample_center_crop',
+        default=200,
+        type=float,
+        help='part of the center is cropped')
+    parser.add_argument(
         '--initial_scale',
         default=1.0,
         type=float,
