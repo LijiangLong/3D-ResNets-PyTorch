@@ -55,7 +55,7 @@ def parse_opts():
     parser.add_argument(
         '--sample_center_crop',
         default=200,
-        type=float,
+        type=int,
         help='part of the center is cropped')
     parser.add_argument(
         '--initial_scale',
