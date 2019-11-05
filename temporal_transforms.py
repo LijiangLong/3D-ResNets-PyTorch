@@ -110,3 +110,14 @@ class TemporalRandomCrop(object):
             out.append(index)
 
         return out
+
+class TemporalCenterCropFlexible(object):
+    def __init__(self, begin=15, step=3, end=108):
+        self.begin = begin
+        self.step = step
+        self.end = end
+        assert (end - begin) / step + 1 == 32
+
+    def __call__(self, frame_indices):
+        out = frame_indices[slice(self.begin, self.end+1, self.step)]
+        return out
