@@ -7,12 +7,13 @@ import pdb
 
 
 def main(split_ratio,test_datasets):
-    train_list_file = '/Users/lijiang/Downloads/train.csv'
-    val_list_file = '/Users/lijiang/Downloads/val.csv'
-    test_list_file = '/Users/lijiang/Downloads/test.csv'
-    dictionary_file = '/Users/lijiang/Downloads/category_dic'
-    jpg_folder = '/Users/lijiang/Downloads/jpgs'
-    project_labels_file = '/Users/lijiang/Downloads/ManualLabeledClusters.csv'
+    home_folder = '/data/home/llong35/data/11_07_2019'
+    train_list_file = os.path.join(home_folder,'train.csv')
+    val_list_file = os.path.join(home_folder,'val.csv')
+    test_list_file = os.path.join(home_folder,'test.csv')
+    dictionary_file = os.path.join(home_folder,'category_dic')
+    jpg_folder =  os.path.join(home_folder,'annotate_video_jpg')
+    project_labels_file =  os.path.join(home_folder,'ManualLabeledClusters.csv')
     project_labels_df = pd.read_csv(project_labels_file)
     project_labels_dic = {}
     for index, row in project_labels_df.iterrows():
