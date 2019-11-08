@@ -40,10 +40,11 @@ def load_labels(label_csv_path):
     return labels
 
 def convert_cichlids_csv_to_activitynet_json(label_csv_path, train_csv_path, 
-                                           val_csv_path, dst_json_path):
+                                           val_csv_path,test_csv_path, dst_json_path):
     labels = load_labels(label_csv_path)
     train_database = convert_csv_to_dict(train_csv_path, 'training')
     val_database = convert_csv_to_dict(val_csv_path, 'validation')
+    test_database = convert_csv_to_dict(test_csv_path, 'test')
     
     dst_data = {}
     
@@ -52,18 +53,18 @@ def convert_cichlids_csv_to_activitynet_json(label_csv_path, train_csv_path,
     dst_data['database'] = {}
     dst_data['database'].update(train_database)
     dst_data['database'].update(val_database)
+    dst_data['database'].update(test_database)
 
     with open(dst_json_path, 'w') as dst_file:
         json.dump(dst_data, dst_file)
 
 if __name__ == '__main__':
     csv_dir_path = sys.argv[1]
-    label_csv_path = sys.argv[2]
-
-    #label_csv_path = os.path.join(csv_dir_path, 'classInd.txt')
-    train_csv_path = os.path.join(csv_dir_path, 'cichlids_train_list.txt')
-    val_csv_path = os.path.join(csv_dir_path, 'cichlids_test_list.txt')
+    label_csv_path = os.path.join(csv_dir_path, 'category_dic')
+    train_csv_path = os.path.join(csv_dir_path, 'train.csv')
+    val_csv_path = os.path.join(csv_dir_path, 'val.csv')
+    test_csv_path = os.path.join(csv_dir_path, 'test.csv')
     dst_json_path = os.path.join(csv_dir_path, 'cichlids.json')
 
     convert_cichlids_csv_to_activitynet_json(label_csv_path, train_csv_path,
-                                               val_csv_path, dst_json_path)
+                                               val_csv_path, test_csv_path,dst_json_path)
