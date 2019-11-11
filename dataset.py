@@ -117,7 +117,7 @@ def get_test_set(opt, spatial_transform, temporal_transform, target_transform):
     if opt.test_subset == 'val':
         subset = 'validation'
     elif opt.test_subset == 'test':
-        subset = 'testing'
+        subset = 'test'
     if opt.dataset == 'kinetics':
         test_data = Kinetics(
             opt.video_path,
@@ -165,7 +165,7 @@ def get_test_set(opt, spatial_transform, temporal_transform, target_transform):
             opt.video_path,
             opt.annotation_path,
             'test',
-            spatial_transform,
-            temporal_transform,
-            target_transform)
+            spatial_transform=spatial_transform,
+            temporal_transform=temporal_transform,
+            target_transform=target_transform)
     return test_data
