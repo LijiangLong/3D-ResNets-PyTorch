@@ -74,7 +74,7 @@ if __name__ == '__main__':
         #         opt.scales, opt.sample_size, crop_positions=['c'])
 
         spatial_transform = Compose([
-            FixedScaleRandomCenterCrop,
+            FixedScaleRandomCenterCrop(opt.sample_size),
             RandomHorizontalFlip(),
             ToTensor(opt.norm_value), norm_method
         ])
