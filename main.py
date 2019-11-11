@@ -64,20 +64,19 @@ if __name__ == '__main__':
     else:
         norm_method = Normalize(opt.mean, opt.std)
     if not opt.no_train:
-        assert opt.train_crop in ['random', 'corner', 'center']
-        if opt.train_crop == 'random':
-            crop_method = MultiScaleRandomCrop(opt.scales, opt.sample_size)
-        elif opt.train_crop == 'corner':
-            crop_method = MultiScaleCornerCrop(opt.scales, opt.sample_size)
-        elif opt.train_crop == 'center':
-            crop_method = MultiScaleCornerCrop(
-                opt.scales, opt.sample_size, crop_positions=['c'])
+        # assert opt.train_crop in ['random', 'corner', 'center']
+        # if opt.train_crop == 'random':
+        #     crop_method = MultiScaleRandomCrop(opt.scales, opt.sample_size)
+        # elif opt.train_crop == 'corner':
+        #     crop_method = MultiScaleCornerCrop(opt.scales, opt.sample_size)
+        # elif opt.train_crop == 'center':
+        #     crop_method = MultiScaleCornerCrop(
+        #         opt.scales, opt.sample_size, crop_positions=['c'])
         spatial_transform = Compose([
             FixedScaleRandomCenterCrop,
             RandomHorizontalFlip(),
             ToTensor(opt.norm_value), norm_method
         ])
-        
         temporal_transform = TemporalCenterRandomCrop(opt.sample_duration)
         target_transform = ClassLabel()
         training_data = get_training_set(opt, spatial_transform,
