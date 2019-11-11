@@ -370,7 +370,7 @@ class MultiScaleRandomCrop(object):
 
 
 class FixedScaleRandomCenterCrop(object):
-    def __init__(self, size,offset=20):
+    def __init__(self, size,offset=30):
         self.size = size
         self.offset = offset
 

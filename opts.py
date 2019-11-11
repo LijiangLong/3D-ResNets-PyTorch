@@ -49,50 +49,18 @@ def parse_opts():
         help='Height and width of inputs')
     parser.add_argument(
         '--sample_duration',
-        default=16,
+        default=96,
         type=int,
         help='Temporal duration of inputs')
     parser.add_argument(
-        '--sample_center_crop',
-        default=200,
-        type=int,
-        help='part of the center is cropped')
-    parser.add_argument(
-        '--initial_scale',
-        default=1.0,
-        type=float,
-        help='Initial scale for multiscale cropping')
-    parser.add_argument(
-        '--n_scales',
-        default=5,
-        type=int,
-        help='Number of scales for multiscale cropping')
-    parser.add_argument(
-        '--scale_step',
-        default=0.84089641525,
-        type=float,
-        help='Scale step for multiscale cropping')
-    parser.add_argument(
-        '--train_crop',
-        default='corner',
-        type=str,
-        help=
-        'Spatial cropping method in training. random is uniform. corner is selection from 4 corners and 1 center.  (random | corner | center)'
-    )
-    parser.add_argument(
         '--learning_rate',
-        default=0.1,
+        default=0.01,
         type=float,
         help=
-        'Initial learning rate (divided by 10 while training by lr scheduler)')
-    parser.add_argument('--momentum', default=0.9, type=float, help='Momentum')
-    parser.add_argument(
-        '--dampening', default=0.9, type=float, help='dampening of SGD')
-    parser.add_argument(
-        '--weight_decay', default=1e-3, type=float, help='Weight Decay')
+        'Initial learning rate')
     parser.add_argument(
         '--mean_dataset',
-        default='activitynet',
+        default='cichlids',
         type=str,
         help=
         'dataset for mean values of mean subtraction (activitynet | kinetics |cichlids)')
@@ -107,24 +75,15 @@ def parse_opts():
         help='If true, inputs are normalized by standard deviation.')
     parser.set_defaults(std_norm=False)
     parser.add_argument(
-        '--nesterov', action='store_true', help='Nesterov momentum')
-    parser.set_defaults(nesterov=False)
-    parser.add_argument(
         '--optimizer',
-        default='sgd',
+        default='adam',
         type=str,
-        help='Currently only support SGD')
+        help='Currently only support adam')
     parser.add_argument(
-        '--lr_patience',
-        default=10,
-        type=int,
-        help='Patience of LR scheduler. See documentation of ReduceLROnPlateau.'
-    )
-    parser.add_argument(
-        '--batch_size', default=128, type=int, help='Batch Size')
+        '--batch_size', default=12, type=int, help='Batch Size')
     parser.add_argument(
         '--n_epochs',
-        default=200,
+        default=100,
         type=int,
         help='Number of total epochs to run')
     parser.add_argument(
@@ -169,20 +128,6 @@ def parse_opts():
         default='test',
         type=str,
         help='Used subset in test (val | test)')
-    # parser.add_argument(
-    #     '--scale_in_test',
-    #     default=1.0,
-    #     type=float,
-    #     help='Spatial scale in test')
-    # parser.add_argument(
-    #     '--crop_position_in_test',
-    #     default='c',
-    #     type=str,
-    #     help='Cropping method (c | tl | tr | bl | br) in test')
-    # parser.add_argument(
-    #     '--no_softmax_in_test',
-    #     action='store_true',
-    #     help='If true, output for each clip is not normalized using softmax.')
     parser.set_defaults(no_softmax_in_test=False)
     parser.add_argument(
         '--no_cuda', action='store_true', help='If true, cuda is not used.')

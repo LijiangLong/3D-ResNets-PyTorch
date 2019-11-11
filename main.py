@@ -5,7 +5,6 @@ import numpy as np
 import torch
 from torch import nn
 from torch import optim
-from torch.optim import lr_scheduler
 import pdb
 
 from opts import parse_opts
@@ -37,17 +36,12 @@ if __name__ == '__main__':
             opt.pretrain_path = os.path.join(opt.root_path, opt.pretrain_path)
         if not os.path.exists(opt.result_path):
             os.makedirs(opt.result_path)
-
-    # opt.scales = [opt.initial_scale]
-    # for i in range(1, opt.n_scales):
-    #     opt.scales.append(opt.scales[-1] * opt.scale_step)
     opt.arch = '{}-{}'.format(opt.model, opt.model_depth)
-    
     opt.mean = get_mean(opt.norm_value, dataset=opt.mean_dataset)
     opt.std = get_std(opt.norm_value, dataset=opt.mean_dataset)
     print(opt)
-    #with open(os.path.join(opt.result_path, 'opts.json'), 'w') as opt_file:
-    #    json.dump(vars(opt), opt_file)
+    with open(os.path.join(opt.result_path, 'opts.json'), 'w') as opt_file:
+       json.dump(vars(opt), opt_file)
 
     torch.manual_seed(opt.manual_seed)
 
@@ -64,15 +58,6 @@ if __name__ == '__main__':
     else:
         norm_method = Normalize(opt.mean, opt.std)
     if not opt.no_train:
-        # assert opt.train_crop in ['random', 'corner', 'center']
-        # if opt.train_crop == 'random':
-        #     crop_method = MultiScaleRandomCrop(opt.scales, opt.sample_size)
-        # elif opt.train_crop == 'corner':
-        #     crop_method = MultiScaleCornerCrop(opt.scales, opt.sample_size)
-        # elif opt.train_crop == 'center':
-        #     crop_method = MultiScaleCornerCrop(
-        #         opt.scales, opt.sample_size, crop_positions=['c'])
-
         spatial_transform = Compose([
             FixedScaleRandomCenterCrop(opt.sample_size),
             RandomHorizontalFlip(),
@@ -95,33 +80,10 @@ if __name__ == '__main__':
             os.path.join(opt.result_path, 'train_batch.log'),
             ['epoch', 'batch', 'iter', 'loss', 'acc', 'lr'])
 
-        # if opt.nesterov:
-        #     dampening = 0
-        # else:
-        #     dampening = opt.dampening
-        # optimizer = optim.SGD(
-        #     parameters,
-        #     lr=opt.learning_rate,
-        #     momentum=opt.momentum,
-        #     dampening=dampening,
-        #     weight_decay=opt.weight_decay,
-        #     nesterov=opt.nesterov)
         optimizer = optim.Adam(
             parameters,
             lr=opt.learning_rate)
-        # scheduler = lr_scheduler.ReduceLROnPlateau(
-        #     optimizer, 'min', patience=opt.lr_patience)
     if not opt.no_val:
-        # spatial_transform = Compose([
-        #     CenterCrop(opt.sample_center_crop),
-        #     Scale(opt.sample_size),
-        #     CenterCrop(opt.sample_size),
-        #     ToTensor(opt.norm_value), norm_method
-        # ])
-        # temporal_transform = TemporalRandomCrop(opt.sample_duration)
-        #temporal_transform = LoopPadding(opt.sample_duration)
-        # target_transform = ClassLabel()
-
         validation_data = get_validation_set(
             opt, spatial_transform, temporal_transform, target_transform)
         val_loader = torch.utils.data.DataLoader(
@@ -158,7 +120,7 @@ if __name__ == '__main__':
             optimizer.load_state_dict(checkpoint['optimizer'])
 
     print('run')
-    pdb.set_trace()
+    # pdb.set_trace()
     for i in range(opt.begin_epoch, opt.n_epochs + 1):
         if not opt.no_train:
             train_epoch(i, train_loader, model, criterion, optimizer, opt,
