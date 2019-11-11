@@ -104,11 +104,9 @@ def get_validation_set(opt, spatial_transform, temporal_transform,
             opt.video_path,
             opt.annotation_path,
             'validation',
-            opt.n_val_samples,
             spatial_transform,
             temporal_transform,
-            target_transform,
-            sample_duration=opt.sample_duration)
+            target_transform)
     return validation_data
 
 
@@ -166,10 +164,8 @@ def get_test_set(opt, spatial_transform, temporal_transform, target_transform):
         test_data = cichlids(
             opt.video_path,
             opt.annotation_path,
-            subset,
-            0,
+            'test',
             spatial_transform,
             temporal_transform,
-            target_transform,
-            sample_duration=opt.sample_duration)
+            target_transform)
     return test_data

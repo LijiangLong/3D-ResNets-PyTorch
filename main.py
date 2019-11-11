@@ -13,15 +13,15 @@ from model import generate_model
 from mean import get_mean, get_std
 from spatial_transforms import (
     Compose, Normalize, Scale, CenterCrop, CornerCrop, MultiScaleCornerCrop,
-    MultiScaleRandomCrop, RandomHorizontalFlip, ToTensor)
-from temporal_transforms import LoopPadding, TemporalRandomCrop, TemporalCenterCropFlexible
+    MultiScaleRandomCrop, RandomHorizontalFlip, FixedScaleRandomCenterCrop, ToTensor)
+from temporal_transforms import LoopPadding, TemporalRandomCrop, TemporalCenterCropFlexible,TemporalCenterRandomCrop
 from target_transforms import ClassLabel, VideoID
 from target_transforms import Compose as TargetCompose
 from dataset import get_training_set, get_validation_set, get_test_set
 from utils import Logger
 from train import train_epoch
 from validation import val_epoch
-import test
+from test import test_epoch
 
 
 if __name__ == '__main__':
@@ -37,6 +37,7 @@ if __name__ == '__main__':
             opt.pretrain_path = os.path.join(opt.root_path, opt.pretrain_path)
         if not os.path.exists(opt.result_path):
             os.makedirs(opt.result_path)
+    pdb.set_trace()
     opt.scales = [opt.initial_scale]
     for i in range(1, opt.n_scales):
         opt.scales.append(opt.scales[-1] * opt.scale_step)
@@ -72,13 +73,12 @@ if __name__ == '__main__':
             crop_method = MultiScaleCornerCrop(
                 opt.scales, opt.sample_size, crop_positions=['c'])
         spatial_transform = Compose([
-            CenterCrop(opt.sample_center_crop),
-            crop_method,
+            FixedScaleRandomCenterCrop,
             RandomHorizontalFlip(),
             ToTensor(opt.norm_value), norm_method
         ])
         
-        temporal_transform = TemporalRandomCrop(opt.sample_duration)
+        temporal_transform = TemporalCenterRandomCrop(opt.sample_duration)
         target_transform = ClassLabel()
         training_data = get_training_set(opt, spatial_transform,
                                          temporal_transform, target_transform)
@@ -95,29 +95,32 @@ if __name__ == '__main__':
             os.path.join(opt.result_path, 'train_batch.log'),
             ['epoch', 'batch', 'iter', 'loss', 'acc', 'lr'])
 
-        if opt.nesterov:
-            dampening = 0
-        else:
-            dampening = opt.dampening
-        optimizer = optim.SGD(
+        # if opt.nesterov:
+        #     dampening = 0
+        # else:
+        #     dampening = opt.dampening
+        # optimizer = optim.SGD(
+        #     parameters,
+        #     lr=opt.learning_rate,
+        #     momentum=opt.momentum,
+        #     dampening=dampening,
+        #     weight_decay=opt.weight_decay,
+        #     nesterov=opt.nesterov)
+        optimizer = optim.Adam(
             parameters,
-            lr=opt.learning_rate,
-            momentum=opt.momentum,
-            dampening=dampening,
-            weight_decay=opt.weight_decay,
-            nesterov=opt.nesterov)
-        scheduler = lr_scheduler.ReduceLROnPlateau(
-            optimizer, 'min', patience=opt.lr_patience)
+            lr=opt.learning_rate)
+        # scheduler = lr_scheduler.ReduceLROnPlateau(
+        #     optimizer, 'min', patience=opt.lr_patience)
     if not opt.no_val:
-        spatial_transform = Compose([
-            CenterCrop(opt.sample_center_crop),
-            Scale(opt.sample_size),
-            CenterCrop(opt.sample_size),
-            ToTensor(opt.norm_value), norm_method
-        ])
-        temporal_transform = TemporalRandomCrop(opt.sample_duration)
+        # spatial_transform = Compose([
+        #     CenterCrop(opt.sample_center_crop),
+        #     Scale(opt.sample_size),
+        #     CenterCrop(opt.sample_size),
+        #     ToTensor(opt.norm_value), norm_method
+        # ])
+        # temporal_transform = TemporalRandomCrop(opt.sample_duration)
         #temporal_transform = LoopPadding(opt.sample_duration)
-        target_transform = ClassLabel()
+        # target_transform = ClassLabel()
         validation_data = get_validation_set(
             opt, spatial_transform, temporal_transform, target_transform)
         val_loader = torch.utils.data.DataLoader(
@@ -128,6 +131,20 @@ if __name__ == '__main__':
             pin_memory=True)
         val_logger = Logger(
             os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'acc'])
+
+    if opt.test:
+        test_data = get_test_set(opt, spatial_transform, temporal_transform,
+                     target_transform)
+        test_loader = torch.utils.data.DataLoader(
+            test_data,
+            batch_size=opt.batch_size,
+            shuffle=False,
+            num_workers=opt.n_threads,
+            pin_memory=True)
+        test_logger = Logger(
+            os.path.join(opt.result_path, 'test.log'), ['epoch', 'loss', 'acc'])
+
+
 
     if opt.resume_path:
         print('loading checkpoint {}'.format(opt.resume_path))
@@ -147,25 +164,26 @@ if __name__ == '__main__':
         if not opt.no_val:
             validation_loss = val_epoch(i, val_loader, model, criterion, opt,
                                         val_logger)
+        if test:
+            test_epoch(i,test_loader,model,criterion,opt,test_logger)
+        # if not opt.no_train and not opt.no_val:
+        #     scheduler.step(validation_loss)
 
-        if not opt.no_train and not opt.no_val:
-            scheduler.step(validation_loss)
-
-    if opt.test:
-        spatial_transform = Compose([
-            Scale(int(opt.sample_size / opt.scale_in_test)),
-            CornerCrop(opt.sample_size, opt.crop_position_in_test),
-            ToTensor(opt.norm_value), norm_method
-        ])
-        temporal_transform = LoopPadding(opt.sample_duration)
-        target_transform = VideoID()
-
-        test_data = get_test_set(opt, spatial_transform, temporal_transform,
-                                 target_transform)
-        test_loader = torch.utils.data.DataLoader(
-            test_data,
-            batch_size=opt.batch_size,
-            shuffle=False,
-            num_workers=opt.n_threads,
-            pin_memory=True)
-        test.test(test_loader, model, opt, test_data.class_names)
+    # if opt.test:
+    #     spatial_transform = Compose([
+    #         Scale(int(opt.sample_size / opt.scale_in_test)),
+    #         CornerCrop(opt.sample_size, opt.crop_position_in_test),
+    #         ToTensor(opt.norm_value), norm_method
+    #     ])
+    #     temporal_transform = LoopPadding(opt.sample_duration)
+    #     target_transform = VideoID()
+    #
+    #     test_data = get_test_set(opt, spatial_transform, temporal_transform,
+    #                              target_transform)
+    #     test_loader = torch.utils.data.DataLoader(
+    #         test_data,
+    #         batch_size=opt.batch_size,
+    #         shuffle=False,
+    #         num_workers=opt.n_threads,
+    #         pin_memory=True)
+    #     test.test(test_loader, model, opt, test_data.class_names)

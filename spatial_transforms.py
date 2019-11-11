@@ -367,3 +367,25 @@ class MultiScaleRandomCrop(object):
         self.scale = self.scales[random.randint(0, len(self.scales) - 1)]
         self.tl_x = random.random()
         self.tl_y = random.random()
+
+
+class FixedScaleRandomCenterCrop(object):
+    def __init__(self, size,offset=20):
+        self.size = size
+        self.offset = offset
+
+
+    def __call__(self, img):
+        w, h = img.size
+        th, tw = self.size, self.size
+        assert w > tw+2*self.offset and h > th+2*self.offset
+        random.seed(self.seed_x)
+        offset_x = random.randint(self.offset, w - self.offset - tw - 1)
+        random.seed(self.seed_y)
+        offset_y = random.randint(self.offset, h - self.offset - th - 1)
+
+        return img.crop((offset_x, offset_y, offset_x + tw, offset_y + th))
+
+    def randomize_parameters(self):
+        self.seed_x = random.randint(0, 1000)
+        self.seed_y = random.randint(0, 1000)
