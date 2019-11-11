@@ -104,9 +104,9 @@ def get_validation_set(opt, spatial_transform, temporal_transform,
             opt.video_path,
             opt.annotation_path,
             'validation',
-            spatial_transform,
-            temporal_transform,
-            target_transform)
+            spatial_transform=spatial_transform,
+            temporal_transform=temporal_transform,
+            target_transform=target_transform)
     return validation_data
 
 
