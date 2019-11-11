@@ -37,7 +37,7 @@ if __name__ == '__main__':
             opt.pretrain_path = os.path.join(opt.root_path, opt.pretrain_path)
         if not os.path.exists(opt.result_path):
             os.makedirs(opt.result_path)
-    pdb.set_trace()
+
     # opt.scales = [opt.initial_scale]
     # for i in range(1, opt.n_scales):
     #     opt.scales.append(opt.scales[-1] * opt.scale_step)
@@ -72,6 +72,7 @@ if __name__ == '__main__':
         # elif opt.train_crop == 'center':
         #     crop_method = MultiScaleCornerCrop(
         #         opt.scales, opt.sample_size, crop_positions=['c'])
+        pdb.set_trace()
         spatial_transform = Compose([
             FixedScaleRandomCenterCrop,
             RandomHorizontalFlip(),
