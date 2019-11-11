@@ -72,7 +72,7 @@ if __name__ == '__main__':
         # elif opt.train_crop == 'center':
         #     crop_method = MultiScaleCornerCrop(
         #         opt.scales, opt.sample_size, crop_positions=['c'])
-        pdb.set_trace()
+
         spatial_transform = Compose([
             FixedScaleRandomCenterCrop,
             RandomHorizontalFlip(),
@@ -121,6 +121,7 @@ if __name__ == '__main__':
         # temporal_transform = TemporalRandomCrop(opt.sample_duration)
         #temporal_transform = LoopPadding(opt.sample_duration)
         # target_transform = ClassLabel()
+        #pdb.set_trace()
         validation_data = get_validation_set(
             opt, spatial_transform, temporal_transform, target_transform)
         val_loader = torch.utils.data.DataLoader(
