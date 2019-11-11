@@ -38,9 +38,9 @@ if __name__ == '__main__':
         if not os.path.exists(opt.result_path):
             os.makedirs(opt.result_path)
     pdb.set_trace()
-    opt.scales = [opt.initial_scale]
-    for i in range(1, opt.n_scales):
-        opt.scales.append(opt.scales[-1] * opt.scale_step)
+    # opt.scales = [opt.initial_scale]
+    # for i in range(1, opt.n_scales):
+    #     opt.scales.append(opt.scales[-1] * opt.scale_step)
     opt.arch = '{}-{}'.format(opt.model, opt.model_depth)
     
     opt.mean = get_mean(opt.norm_value, dataset=opt.mean_dataset)
@@ -132,7 +132,7 @@ if __name__ == '__main__':
         val_logger = Logger(
             os.path.join(opt.result_path, 'val.log'), ['epoch', 'loss', 'acc'])
 
-    if opt.test:
+    if not opt.no_test:
         test_data = get_test_set(opt, spatial_transform, temporal_transform,
                      target_transform)
         test_loader = torch.utils.data.DataLoader(
@@ -164,7 +164,7 @@ if __name__ == '__main__':
         if not opt.no_val:
             validation_loss = val_epoch(i, val_loader, model, criterion, opt,
                                         val_logger)
-        if test:
+        if not opt.no_test:
             test_epoch(i,test_loader,model,criterion,opt,test_logger)
         # if not opt.no_train and not opt.no_val:
         #     scheduler.step(validation_loss)

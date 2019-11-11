@@ -15,7 +15,7 @@ def parse_opts():
         help='Directory path of Videos')
     parser.add_argument(
         '--annotation_path',
-        default='kinetics.json',
+        default='cichlids.json',
         type=str,
         help='Annotation file path')
     parser.add_argument(
@@ -25,19 +25,19 @@ def parse_opts():
         help='Result directory path')
     parser.add_argument(
         '--dataset',
-        default='kinetics',
+        default='cichlids',
         type=str,
         help='Used dataset (activitynet | kinetics | ucf101 | hmdb51 | cichlids)')
     parser.add_argument(
         '--n_classes',
-        default=400,
+        default=10,
         type=int,
         help=
-        'Number of classes (activitynet: 200, kinetics: 400, ucf101: 101, hmdb51: 51)'
+        'Number of classes (activitynet: 200, kinetics: 400, ucf101: 101, hmdb51: 51, cichlids: 10)'
     )
     parser.add_argument(
         '--n_finetune_classes',
-        default=400,
+        default=10,
         type=int,
         help=
         'Number of classes for fine-tuning. n_classes is set to the number when pretraining.'
@@ -162,34 +162,34 @@ def parse_opts():
         help='If true, validation is not performed.')
     parser.set_defaults(no_val=False)
     parser.add_argument(
-        '--test', action='store_true', help='If true, test is performed.')
+        '--no_test', action='store_true', help='If true, test is not performed.')
     parser.set_defaults(test=False)
     parser.add_argument(
         '--test_subset',
-        default='val',
+        default='test',
         type=str,
         help='Used subset in test (val | test)')
-    parser.add_argument(
-        '--scale_in_test',
-        default=1.0,
-        type=float,
-        help='Spatial scale in test')
-    parser.add_argument(
-        '--crop_position_in_test',
-        default='c',
-        type=str,
-        help='Cropping method (c | tl | tr | bl | br) in test')
-    parser.add_argument(
-        '--no_softmax_in_test',
-        action='store_true',
-        help='If true, output for each clip is not normalized using softmax.')
+    # parser.add_argument(
+    #     '--scale_in_test',
+    #     default=1.0,
+    #     type=float,
+    #     help='Spatial scale in test')
+    # parser.add_argument(
+    #     '--crop_position_in_test',
+    #     default='c',
+    #     type=str,
+    #     help='Cropping method (c | tl | tr | bl | br) in test')
+    # parser.add_argument(
+    #     '--no_softmax_in_test',
+    #     action='store_true',
+    #     help='If true, output for each clip is not normalized using softmax.')
     parser.set_defaults(no_softmax_in_test=False)
     parser.add_argument(
         '--no_cuda', action='store_true', help='If true, cuda is not used.')
     parser.set_defaults(no_cuda=False)
     parser.add_argument(
         '--n_threads',
-        default=4,
+        default=5,
         type=int,
         help='Number of threads for multi-thread loading')
     parser.add_argument(
