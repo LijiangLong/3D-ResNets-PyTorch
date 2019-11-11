@@ -136,7 +136,7 @@ def parse_opts():
     )
     parser.add_argument(
         '--n_val_samples',
-        default=3,
+        default=1,
         type=int,
         help='Number of validation samples for each activity')
     parser.add_argument(
