@@ -121,7 +121,7 @@ if __name__ == '__main__':
         # temporal_transform = TemporalRandomCrop(opt.sample_duration)
         #temporal_transform = LoopPadding(opt.sample_duration)
         # target_transform = ClassLabel()
-        #pdb.set_trace()
+
         validation_data = get_validation_set(
             opt, spatial_transform, temporal_transform, target_transform)
         val_loader = torch.utils.data.DataLoader(
@@ -158,6 +158,7 @@ if __name__ == '__main__':
             optimizer.load_state_dict(checkpoint['optimizer'])
 
     print('run')
+    pdb.set_trace()
     for i in range(opt.begin_epoch, opt.n_epochs + 1):
         if not opt.no_train:
             train_epoch(i, train_loader, model, criterion, optimizer, opt,

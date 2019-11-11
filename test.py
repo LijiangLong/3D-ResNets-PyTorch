@@ -116,6 +116,6 @@ def test_epoch(epoch, data_loader, model, criterion, opt, logger):
                     acc=accuracies))
 
 
-        logger.log({'epoch': epoch, 'loss': losses.avg, 'acc': accuracies.avg})
+    logger.log({'epoch': epoch, 'loss': losses.avg, 'acc': accuracies.avg})
 
-        return losses.avg
+    return losses.avg
