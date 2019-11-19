@@ -12,7 +12,7 @@ from model import generate_model
 from mean import get_mean, get_std
 from spatial_transforms import (
     Compose, Normalize, Scale, CenterCrop, CornerCrop, MultiScaleCornerCrop,
-    MultiScaleRandomCrop, RandomHorizontalFlip, FixedScaleRandomCenterCrop, ToTensor)
+    MultiScaleRandomCrop, RandomHorizontalFlip, FixedScaleRandomCenterCrop, ToTensor, RandomRotation)
 from temporal_transforms import LoopPadding, TemporalRandomCrop, TemporalCenterCropFlexible,TemporalCenterRandomCrop
 from target_transforms import ClassLabel, VideoID
 from target_transforms import Compose as TargetCompose
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     if not opt.no_train:
         spatial_transform = Compose([
             FixedScaleRandomCenterCrop(opt.sample_size),
-            RandomHorizontalFlip(),
+            RandomRotation(),
             ToTensor(opt.norm_value), norm_method
         ])
         temporal_transform = TemporalCenterRandomCrop(opt.sample_duration)
@@ -84,6 +84,10 @@ if __name__ == '__main__':
             parameters,
             lr=opt.learning_rate)
     if not opt.no_val:
+        spatial_transform = Compose([
+            Scale(opt.sample_size),
+            ToTensor(opt.norm_value), norm_method
+        ])
         validation_data = get_validation_set(
             opt, spatial_transform, temporal_transform, target_transform)
         val_loader = torch.utils.data.DataLoader(

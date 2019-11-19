@@ -268,6 +268,33 @@ class RandomHorizontalFlip(object):
     def randomize_parameters(self):
         self.p = random.random()
 
+class RandomRotation(object):
+    """random rotate a video with equal probability."""
+
+    def __call__(self, img):
+        """
+        Args:
+            img (PIL.Image): Image to be flipped.
+        Returns:
+            PIL.Image: Randomly flipped image.
+        """
+        if self.p < 0.16666666666666666:
+            return img.transpose(Image.FLIP_LEFT_RIGHT)
+        elif self.p < 0.3333333333333333:
+            return img.transpose(Image.FLIP_TOP_BOTTOM)
+        elif self.p < 0.5:
+            return img.transpose(Image.ROTATE_90)
+        elif self.p < 0.6666666666666666:
+            return img.transpose(Image.ROTATE_180)
+        elif self.p < 0.8333333333333333:
+            return img.transpose(Image.ROTATE_270)
+        else:
+            return img
+
+    def randomize_parameters(self):
+        self.p = random.random()
+
+
 
 class MultiScaleCornerCrop(object):
     """Crop the given PIL.Image to randomly selected size.
@@ -370,7 +397,7 @@ class MultiScaleRandomCrop(object):
 
 
 class FixedScaleRandomCenterCrop(object):
-    def __init__(self, size,offset=30):
+    def __init__(self, size,offset=20):
         self.size = size
         self.offset = offset
 
