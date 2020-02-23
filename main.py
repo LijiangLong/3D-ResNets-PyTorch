@@ -25,7 +25,6 @@ import test
 
 
 if __name__ == '__main__':
-    pdb.set_trace()
     
     opt = parse_opts()
     if opt.root_path != '':
