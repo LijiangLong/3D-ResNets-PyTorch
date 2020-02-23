@@ -134,9 +134,6 @@ if __name__ == '__main__':
             validation_loss = val_epoch(i, val_loader, model, criterion, opt,
                                         val_logger)
 
-        if not opt.no_train and not opt.no_val:
-            scheduler.step(validation_loss)
-
     if opt.test:
         spatial_transform = Compose([
             Scale(int(opt.sample_size / opt.scale_in_test)),
