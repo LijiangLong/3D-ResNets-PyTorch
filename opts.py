@@ -113,7 +113,7 @@ def parse_opts():
         help='Number of total epochs to run')
     parser.add_argument(
         '--begin_epoch',
-        default=1,
+        default=100,
         type=int,
         help=
         'Training begins at this epoch. Previous trained model indicated by resume_path is loaded.'
