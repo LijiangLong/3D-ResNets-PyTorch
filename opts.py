@@ -92,9 +92,9 @@ def parse_opts():
         help='If true, inputs are not normalized by mean.')
     parser.set_defaults(no_mean_norm=False)
     parser.add_argument(
-        '--std_norm',
+        '--no_std_norm',
         action='store_true',
-        help='If true, inputs are normalized by standard deviation.')
+        help='If true, inputs are not normalized by standard deviation.')
     parser.set_defaults(std_norm=False)
     parser.add_argument(
         '--nesterov', action='store_true', help='Nesterov momentum')
