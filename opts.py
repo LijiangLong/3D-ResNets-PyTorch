@@ -5,7 +5,7 @@ def parse_opts():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--root_path',
-        default='~/data/10_19_2019',
+        default='/data/home/llong35/data/10_19_2019',
         type=str,
         help='Root directory path of data')
     parser.add_argument(
