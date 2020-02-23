@@ -55,9 +55,9 @@ if __name__ == '__main__':
     if not opt.no_cuda:
         criterion = criterion.cuda()
 
-    if opt.no_mean_norm and not opt.std_norm:
+    if opt.no_mean_norm and opt.no_std_norm:
         norm_method = Normalize([0, 0, 0], [1, 1, 1])
-    elif not opt.std_norm:
+    elif opt.no_std_norm:
         norm_method = Normalize(opt.mean, [1, 1, 1])
     else:
         norm_method = Normalize(opt.mean, opt.std)
