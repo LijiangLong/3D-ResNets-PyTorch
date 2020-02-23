@@ -173,7 +173,7 @@ def parse_opts():
     parser.set_defaults(no_cuda=False)
     parser.add_argument(
         '--n_threads',
-        default=4,
+        default=0,
         type=int,
         help='Number of threads for multi-thread loading')
     parser.add_argument(
