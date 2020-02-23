@@ -96,8 +96,6 @@ if __name__ == '__main__':
         optimizer = optim.Adam(
             parameters,
             lr=opt.learning_rate)
-        scheduler = lr_scheduler.ReduceLROnPlateau(
-            optimizer, 'min', patience=opt.lr_patience)
     if not opt.no_val:
         spatial_transform = Compose([
             Scale(opt.sample_size),
