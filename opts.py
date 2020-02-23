@@ -5,17 +5,17 @@ def parse_opts():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--root_path',
-        default='/root/data/ActivityNet',
+        default='~/data/10_19_2019',
         type=str,
         help='Root directory path of data')
     parser.add_argument(
         '--video_path',
-        default='video_kinetics_jpg',
+        default='annotate_video_jpg',
         type=str,
         help='Directory path of Videos')
     parser.add_argument(
         '--annotation_path',
-        default='kinetics.json',
+        default='cichlids.json',
         type=str,
         help='Annotation file path')
     parser.add_argument(
@@ -25,19 +25,19 @@ def parse_opts():
         help='Result directory path')
     parser.add_argument(
         '--dataset',
-        default='kinetics',
+        default='cichlids',
         type=str,
         help='Used dataset (activitynet | kinetics | ucf101 | hmdb51 | cichlids)')
     parser.add_argument(
         '--n_classes',
-        default=400,
+        default=10,
         type=int,
         help=
         'Number of classes (activitynet: 200, kinetics: 400, ucf101: 101, hmdb51: 51)'
     )
     parser.add_argument(
         '--n_finetune_classes',
-        default=400,
+        default=10,
         type=int,
         help=
         'Number of classes for fine-tuning. n_classes is set to the number when pretraining.'
@@ -49,7 +49,7 @@ def parse_opts():
         help='Height and width of inputs')
     parser.add_argument(
         '--sample_duration',
-        default=16,
+        default=120,
         type=int,
         help='Temporal duration of inputs')
     parser.add_argument(
@@ -69,7 +69,7 @@ def parse_opts():
         help='Scale step for multiscale cropping')
     parser.add_argument(
         '--train_crop',
-        default='corner',
+        default='random',
         type=str,
         help=
         'Spatial cropping method in training. random is uniform. corner is selection from 4 corners and 1 center.  (random | corner | center)'
@@ -80,14 +80,9 @@ def parse_opts():
         type=float,
         help=
         'Initial learning rate (divided by 10 while training by lr scheduler)')
-    parser.add_argument('--momentum', default=0.9, type=float, help='Momentum')
-    parser.add_argument(
-        '--dampening', default=0.9, type=float, help='dampening of SGD')
-    parser.add_argument(
-        '--weight_decay', default=1e-3, type=float, help='Weight Decay')
     parser.add_argument(
         '--mean_dataset',
-        default='activitynet',
+        default='cichlids',
         type=str,
         help=
         'dataset for mean values of mean subtraction (activitynet | kinetics |cichlids)')
@@ -106,20 +101,14 @@ def parse_opts():
     parser.set_defaults(nesterov=False)
     parser.add_argument(
         '--optimizer',
-        default='sgd',
+        default='Adam',
         type=str,
         help='Currently only support SGD')
     parser.add_argument(
-        '--lr_patience',
-        default=10,
-        type=int,
-        help='Patience of LR scheduler. See documentation of ReduceLROnPlateau.'
-    )
-    parser.add_argument(
-        '--batch_size', default=128, type=int, help='Batch Size')
+        '--batch_size', default=12, type=int, help='Batch Size')
     parser.add_argument(
         '--n_epochs',
-        default=200,
+        default=1,
         type=int,
         help='Number of total epochs to run')
     parser.add_argument(
@@ -131,7 +120,7 @@ def parse_opts():
     )
     parser.add_argument(
         '--n_val_samples',
-        default=3,
+        default=1,
         type=int,
         help='Number of validation samples for each activity')
     parser.add_argument(
