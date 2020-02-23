@@ -20,7 +20,7 @@ def parse_opts():
         help='Annotation file path')
     parser.add_argument(
         '--result_path',
-        default='results',
+        default='results_lr01',
         type=str,
         help='Result directory path')
     parser.add_argument(
