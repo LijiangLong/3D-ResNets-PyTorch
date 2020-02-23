@@ -93,10 +93,6 @@ if __name__ == '__main__':
             os.path.join(opt.result_path, 'train_batch.log'),
             ['epoch', 'batch', 'iter', 'loss', 'acc', 'lr'])
 
-        if opt.nesterov:
-            dampening = 0
-        else:
-            dampening = opt.dampening
         optimizer = optim.Adam(
             parameters,
             lr=opt.learning_rate)
