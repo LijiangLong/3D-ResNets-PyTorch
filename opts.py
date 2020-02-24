@@ -76,7 +76,7 @@ def parse_opts():
     )
     parser.add_argument(
         '--learning_rate',
-        default=0.1,
+        default=0.01,
         type=float,
         help=
         'Initial learning rate (divided by 10 while training by lr scheduler)')
