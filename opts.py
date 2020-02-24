@@ -108,7 +108,7 @@ def parse_opts():
         '--batch_size', default=12, type=int, help='Batch Size')
     parser.add_argument(
         '--n_epochs',
-        default=1,
+        default=100,
         type=int,
         help='Number of total epochs to run')
     parser.add_argument(
@@ -173,7 +173,7 @@ def parse_opts():
     parser.set_defaults(no_cuda=False)
     parser.add_argument(
         '--n_threads',
-        default=0,
+        default=6,
         type=int,
         help='Number of threads for multi-thread loading')
     parser.add_argument(
