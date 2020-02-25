@@ -20,7 +20,7 @@ def parse_opts():
         help='Annotation file path')
     parser.add_argument(
         '--result_path',
-        default='results_lr001',
+        default='results_lr0001',
         type=str,
         help='Result directory path')
     parser.add_argument(
@@ -76,7 +76,7 @@ def parse_opts():
     )
     parser.add_argument(
         '--learning_rate',
-        default=0.01,
+        default=0.001,
         type=float,
         help=
         'Initial learning rate (divided by 10 while training by lr scheduler)')
